@@ -1,0 +1,28 @@
+{
+  "name": "ttd-kata-javascript-promise",
+  "version": "1.0.0",
+  "description": "Create an implementation of a JavaScript promise as part of a TTD kata",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DuckNode/ttd-kata-javascript-promise.git"
+  },
+  "keywords": [
+    "tdd",
+    "kata",
+    "promises"
+  ],
+  "author": "David Stewart",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DuckNode/ttd-kata-javascript-promise/issues"
+  },
+  "homepage": "https://github.com/DuckNode/ttd-kata-javascript-promise#readme",
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^6.2.0"
+  }
+}
