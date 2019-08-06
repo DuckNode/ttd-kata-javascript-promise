@@ -12,4 +12,4 @@ describe('Array', function() {
 
 describe('CoolPromise class', function() {
     
-}
+})
