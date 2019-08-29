@@ -1,6 +1,6 @@
 'use strict'
 
-module.exports = class CoolPromise {
+module.exports = class SuperDevilPromise {
 
     constructor(executor) {
 
@@ -17,16 +17,50 @@ module.exports = class CoolPromise {
     }
 
     then(onFulfilled) {
-        if(this.value) { 
+        if (this.value) {
             this.state = 'fulfilled'
-            onFulfilled(this.value)
+
+            try {
+                this.value = onFulfilled(this.value)
+                this.reason = undefined
+
+                return new SuperDevilPromise((resolve) => {
+                    resolve(this.value)
+                })
+
+            } catch (callbackReject) {
+                this.value = undefined
+                this.reason = callbackReject
+
+                return new SuperDevilPromise((resolve, reject) => {
+                    reject(callbackReject)
+                })
+            }
         }
+
     }
 
     catch (onRejected) {
-        if(this.reason) {
+        if (this.reason) {
             this.state = 'rejected'
-            onRejected(this.reason)
+
+            try {
+                this.value = onRejected(this.reason)
+                this.reason = undefined
+
+                return new SuperDevilPromise((resolve) => {
+                    resolve(this.value)
+                })
+
+            } catch (callbackReject) {
+                this.value = undefined
+                this.reason = callbackReject
+
+                return new SuperDevilPromise((resolve, reject) => {
+                    reject(callbackReject)
+                })
+            }
         }
     }
+
 }
