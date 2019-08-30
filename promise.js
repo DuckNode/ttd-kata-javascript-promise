@@ -8,59 +8,44 @@ module.exports = class SuperDevilPromise {
 
         const resolve = (value) => {
             this.value = value
+            this.reason = undefined
         }
         const reject = (reason) => {
             this.reason = reason
+            this.value = undefined
         }
 
         executor(resolve, reject)
     }
 
-    then(onFulfilled) {
+    then(onFulfilled, onRejected) {
+
         if (this.value) {
-            this.state = 'fulfilled'
-
             try {
-                this.value = onFulfilled(this.value)
-                this.reason = undefined
+                return this.fulfillPromise(onFulfilled);
 
-                return new SuperDevilPromise((resolve) => {
-                    resolve(this.value)
-                })
-
-            } catch (callbackReject) {
-                this.value = undefined
-                this.reason = callbackReject
-
-                return new SuperDevilPromise((resolve, reject) => {
-                    reject(callbackReject)
-                })
+            } catch (fulfillPromiseError) {
+                return this.rejectPromise(fulfillPromiseError.text);
             }
         }
 
     }
 
-    catch (onRejected) {
-        if (this.reason) {
-            this.state = 'rejected'
+    fulfillPromise(fulfillmentCallback) {
+        let newValue = fulfillmentCallback(this.value);
+        this.state = 'fulfilled'
+        this.reason = undefined;
+        return new SuperDevilPromise((resolve) => {
+            resolve(newValue);
+        });
+    }
 
-            try {
-                this.value = onRejected(this.reason)
-                this.reason = undefined
-
-                return new SuperDevilPromise((resolve) => {
-                    resolve(this.value)
-                })
-
-            } catch (callbackReject) {
-                this.value = undefined
-                this.reason = callbackReject
-
-                return new SuperDevilPromise((resolve, reject) => {
-                    reject(callbackReject)
-                })
-            }
-        }
+    rejectPromise(reason) {
+        this.state = 'rejected'
+        this.value = undefined;
+        return new SuperDevilPromise((resolve, reject) => {
+            reject(reason);
+        });
     }
 
 }

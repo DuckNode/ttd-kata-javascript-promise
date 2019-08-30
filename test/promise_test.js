@@ -11,26 +11,26 @@ describe('Array', function () {
   })
 })
 
-describe('SuperDevilPromise class', function () {
-  
-  describe('when I instantiate a superDevil', function () {
-    it('then superDevil.state is pending', function () {
+describe('given SuperDevilPromise class', function () {
+
+  describe('when I instantiate promise', function () {
+    it('then promise.state is pending', function () {
       let emptyfunction = () => {}
       let promise = new SuperDevilPromise(emptyfunction)
       expect(promise.state).to.equal('pending')
     })
   })
 
-  describe('when I call then() and I have a resolved value', function () {
-    it('then superDevil.state is fulfilled', function () {
+  describe('when I call then()', function () {
+    it('and I have a resolved value, then promise.state is fulfilled', function () {
       let resolvingFunction = (resolve) => {
-        resolve(1)
+        resolve('foo')
       }
       let promise = new SuperDevilPromise(resolvingFunction)
       expect(promise.state).to.equal('pending')
 
       let returningFunction = (value) => {
-        return 2
+        return ('bar')
       }
       promise.then(returningFunction)
       expect(promise.state).to.equal('fulfilled')
