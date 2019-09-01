@@ -19,32 +19,25 @@ module.exports = class SuperDevilPromise {
     }
 
     then(onFulfilled, onRejected) {
-
-        if (this.value) {
-            try {
-                return this.fulfillPromise(onFulfilled);
-
-            } catch (fulfillPromiseError) {
-                return this.rejectPromise(fulfillPromiseError.text);
-            }
+        try {
+            return this.fulfill(this.value ? onFulfilled : onRejected);
+        } catch (settleError) {
+            return this.reject(settleError);
         }
-
     }
 
-    fulfillPromise(fulfillmentCallback) {
-        let newValue = fulfillmentCallback(this.value);
+    fulfill(cb) {
         this.state = 'fulfilled'
-        this.reason = undefined;
+        let newValue = cb(this.value);
         return new SuperDevilPromise((resolve) => {
             resolve(newValue);
         });
     }
 
-    rejectPromise(reason) {
-        this.state = 'rejected'
-        this.value = undefined;
-        return new SuperDevilPromise((resolve, reject) => {
-            reject(reason);
+    reject(settleError) {
+        this.state = 'rejected';
+        return new SuperDevilPromise((_resolve, reject) => {
+            reject(settleError);
         });
     }
 

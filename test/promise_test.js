@@ -15,25 +15,39 @@ describe('given SuperDevilPromise class', function () {
 
   describe('when I instantiate promise', function () {
     it('then promise.state is pending', function () {
-      let emptyfunction = () => {}
-      let promise = new SuperDevilPromise(emptyfunction)
+      let executor = () => {}
+      let promise = new SuperDevilPromise(executor)
       expect(promise.state).to.equal('pending')
     })
   })
 
   describe('when I call then()', function () {
     it('and I have a resolved value, then promise.state is fulfilled', function () {
-      let resolvingFunction = (resolve) => {
+      let executor = (resolve) => {
         resolve('foo')
       }
-      let promise = new SuperDevilPromise(resolvingFunction)
+      let promise = new SuperDevilPromise(executor)
       expect(promise.state).to.equal('pending')
 
-      let returningFunction = (value) => {
+      let onFulfilledFunction = (value) => {
         return ('bar')
       }
-      promise.then(returningFunction)
+      promise.then(onFulfilledFunction)
       expect(promise.state).to.equal('fulfilled')
+    })
+    
+    it('and I have a reject reason, then promise.state is rejected', function () {
+      let executor = (_resolve, reject) => {
+        reject('bad things happening!!!')
+      }
+      let promise = new SuperDevilPromise(executor)
+      expect(promise.state).to.equal('pending')
+
+      let onRejectfunction = (reason) => {
+        throw new Error(reason)
+      }
+      promise.then(undefined, onRejectfunction)
+      expect(promise.state).to.equal('rejected')
     })
   })
 })
