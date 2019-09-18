@@ -1,7 +1,7 @@
 'use strict'
 
 const expect = require('chai').expect
-const SuperDevilPromise = require('../newPromise')
+const SuperDevilPromise = require('../myPromise')
 
 describe('Array', function () {
   describe('#indexOf()', function () {
@@ -14,12 +14,12 @@ describe('Array', function () {
 describe('given SuperDevilPromise class', function () {
 
   describe('when I instantiate promise', function () {
-    it('then promise.state is pending', function () {
+    it.only('then promise.state is pending', function () {
       let noResolveOrRejectExecutor = () => {}
       let promise = new SuperDevilPromise(noResolveOrRejectExecutor)
       expect(promise.state).to.equal('pending')
     })
-    it('and my executor has a resolve call, then promise.state is fulfilled', function () {
+    it.only('and my executor has a resolve call, then promise.state is fulfilled', function () {
       let resolveExecutor = (resolve) => {
         resolve('foo')
       }
@@ -27,11 +27,12 @@ describe('given SuperDevilPromise class', function () {
       expect(promise.state).to.equal('fulfilled')
       expect(promise.value).to.equal('foo')
     })
-    it('and my executor has a reject call, then promise.state is rejected', function () {
+    it.only('and my executor has a reject call, then promise.state is rejected', function () {
       let rejectExecutor = (_resolve, reject) => {
         reject('bar')
       }
       let promise = new SuperDevilPromise(rejectExecutor)
+
       expect(promise.state).to.equal('rejected')
       expect(promise.reason).to.equal('bar')
     })
@@ -51,7 +52,7 @@ describe('given SuperDevilPromise class', function () {
       return String(reason)
     }
 
-    it('and I have a resolved value, then promise.state is fulfilled', async function () {
+    it.only('and I have a resolved value, then promise.state is fulfilled', async function () {
       let promise = new SuperDevilPromise(simpleExecutor).then(simpleOnFulfilled)
       expect(promise.state).to.equal('pending')
       expect(promise.value).to.equal(undefined)
